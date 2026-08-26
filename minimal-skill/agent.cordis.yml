@@ -80,6 +80,17 @@
 - id: tool-skill
   name: '@deepseek-ai/dsh-tool-skill'
 
+# ── goals ───────────────────────────────────────────────────────────────────
+
+# Only the model-facing goal tools. The goal SERVICE, its same-session round
+# driver, and the `/goal` command stay on the host plane; what a preset chooses
+# is whether ITS agent can call the goal tool. Without this row a `/goal`
+# session can never stop itself: the round driver keeps injecting
+# `<goal_round>` while the goal is active+armed, and only `update_goal
+# (complete/pause)` from this tool ends it (or a human pausing the goal).
+- id: tool-goal
+  name: '@deepseek-ai/dsh-tool-goal'
+
 # ── Windows host Git Bash ───────────────────────────────────────────────────
 
 # `gitbash` runs commands on the WINDOWS HOST's Git for Windows Bash

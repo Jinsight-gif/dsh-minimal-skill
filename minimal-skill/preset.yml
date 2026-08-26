@@ -1,2 +1,2 @@
 name: 极简Skill模式
-description: 基于极简模式的固定提示双工具 Agent（持久 bash + str_replace_editor），并为其增加 Skill 目录发现与加载能力。
+description: 基于极简模式的固定提示 Agent（持久 bash + str_replace_editor + skill + goal 工具），并为其增加 Skill 目录发现与加载能力。

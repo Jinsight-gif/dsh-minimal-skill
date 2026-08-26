@@ -2,22 +2,25 @@
 
 DeepSeek Harness (DSH) 的自定义 Agent 预设：在官方「极简模式」(minimal) 的基础上，增加 **Skill 目录发现与加载**能力，其余骨架（固定 persona、持久 bash、str_replace_editor、本地 filesystem realm）原样保留。
 
-> **派生说明**：本预设由官方 [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) 随附的 `minimal` 预设整目录派生（MIT），仅追加了两行来自官方 `standard` 预设的 skill 组件；未改写官方任何原始行。
+> **派生说明**：本预设由官方 [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) 随附的 `minimal` 预设整目录派生（MIT），追加了来自官方 `standard` 预设的三行组件（2 行 skill + 1 行 goal）；未改写官方任何原始行。
 
 ## 与「极简模式」的差异
 
-添加了以下两行（取自官方 `standard` 预设，注册进宿主 skill 注册表的本预设层，无需 realm）：
+添加了以下三行（均取自官方 `standard` / `cordis` 预设，只注册模型工具或注册进宿主注册表的本预设层，无服务发布、无需 realm）：
 
 ```yaml
 - id: skill-filesystem   # 本地 skill 目录发现
   name: '@deepseek-ai/dsh-skill-filesystem'
 - id: tool-skill         # skill 目录 + 加载工具（skill 工具）
   name: '@deepseek-ai/dsh-tool-skill'
+- id: tool-goal          # goal 工具（get_goal / create_goal / update_goal）
+  name: '@deepseek-ai/dsh-tool-goal'
 ```
 
-- 工具清单保持极简：持久 `bash`、`str_replace_editor`、`skill` — 共三个工具。
+- 工具清单保持极简：持久 `bash`、`str_replace_editor`、`skill`、goal 工具（`get_goal` / `create_goal` / `update_goal`）。
 - 保留 `minimal` 的固定 persona（`complete: true`、`includeRuntimeContext: false`）。
 - 可加载任意已知 skill（如 `anysearch`、`r3` 等）。
+- **为什么需要 goal 工具**：`/goal` 模式的 round 驱动器在目标处于 `active + armed` 时每轮结束都会自动注入下一条 `<goal_round>`，唯一的程序化停止方式就是 agent 调用 `update_goal(complete/pause)`（或人工暂停）。若预设不挂 `tool-goal`，agent 完成后无法自行收尾，会空转到 `maxGoalRounds`（默认 256）或等你手动暂停。
 
 ## 安装
 
